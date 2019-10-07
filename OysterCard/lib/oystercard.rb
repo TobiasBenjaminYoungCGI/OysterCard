@@ -1,6 +1,8 @@
 class OysterCard
+  attr_accessor :balance
 
-  def initalization
-    @balance
+  def initalize
+    @balance = 0
   end
+
 end
