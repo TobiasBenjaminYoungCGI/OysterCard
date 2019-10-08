@@ -1,7 +1,8 @@
 require 'oystercard'
 
 describe OysterCard do
-  let(:station){ double :station }
+  let(:entry_station){ double :entry_station }
+  let(:exit_station){ double :exit_station }
 
  it 'has a balance' do
    expect(subject.balance).to eq(0)
@@ -16,15 +17,15 @@ describe OysterCard do
    end
 
    it 'can touch in' do
-     subject.touch_in(station)
+     subject.touch_in(entry_station)
 
      expect(subject.in_journey?).to eq true
    end
 
    it 'can touch out' do
-     subject.touch_in(station)
+     subject.touch_in(entry_station)
 
-     expect { subject.touch_out }.to change { subject.balance }.by(-OysterCard::MINIMUM_AMOUNT)
+     expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-OysterCard::MINIMUM_AMOUNT)
    end
  end
 
@@ -32,13 +33,13 @@ describe OysterCard do
    subject = OysterCard.new
    subject.top_up(2)
    it 'can remember the entry station' do
-    subject.touch_in(station)
+     subject.touch_in(entry_station)
     expect(subject.entry_station).to eq station
    end
 
    it 'forgets entry station' do
-     subject.touch_in(station)
-     subject.touch_out
+     subject.touch_in(entry_station)
+     subject.touch_out(exit_station)
      expect(subject.entry_station).to eq nil
    end
  end

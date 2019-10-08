@@ -1,11 +1,13 @@
 class OysterCard
-  attr_reader :balance, :entry_station
+  attr_reader :balance, :entry_station, :exit_station
   CARD_LIMIT = 90
   MINIMUM_AMOUNT = 1
+
   def initialize(limit=CARD_LIMIT)
     @balance = 0
     @limit = limit
     @entry_station = nil
+
   end
 
   def top_up(money)
@@ -29,7 +31,7 @@ class OysterCard
     !!entry_station
   end
 
-  private 
+  private
 
   def deduct(money)
     @balance -= money
