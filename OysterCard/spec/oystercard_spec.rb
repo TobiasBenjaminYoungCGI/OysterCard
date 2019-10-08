@@ -3,10 +3,27 @@ require 'oystercard'
 describe OysterCard do
   let(:entry_station){ double :entry_station }
   let(:exit_station){ double :exit_station }
+  let(:journey){ { entry_station: entry_station, exit_station: exit_station} }
 
  it 'has a balance' do
    expect(subject.balance).to eq(0)
  end
+
+ describe 'Journey' do
+   subject = OysterCard.new
+   subject.top_up(10)
+
+   it 'has  an empty list of journeys by default' do
+     expect(subject.journeys).to be_empty
+   end
+
+   it 'stores a journey' do
+     subject.touch_in(entry_station)
+     subject.touch_out(exit_station)
+
+     expect(subject.journeys).to include journey
+   end
+  end
 
  describe 'Touching in/Out' do
    subject = OysterCard.new
@@ -29,18 +46,28 @@ describe OysterCard do
    end
  end
 
- describe 'entryStations' do
+ describe 'Stations' do
    subject = OysterCard.new
-   subject.top_up(2)
+   subject.top_up(6)
+   
    it 'can remember the entry station' do
-     subject.touch_in(entry_station)
-    expect(subject.entry_station).to eq station
+    subject.touch_in(entry_station)
+
+    expect(subject.entry_station).to eq entry_station
    end
 
    it 'forgets entry station' do
      subject.touch_in(entry_station)
      subject.touch_out(exit_station)
+
      expect(subject.entry_station).to eq nil
+   end
+
+   it 'remember exit station' do
+     subject.touch_in(entry_station)
+     subject.touch_out(exit_station)
+
+     expect(subject.exit_station).to eq exit_station
    end
  end
  # it 'Exceeds the Card limit' do
